@@ -1,26 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
+import 'login_screen.dart';
 
-import 'home_screen.dart';
-import 'register_screen.dart';
-
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 TextEditingController _username = TextEditingController();
 TextEditingController _password = TextEditingController();
+TextEditingController _cpassword = TextEditingController();
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text('Register'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -67,38 +68,43 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               height: 5,
             ),
+            Text(
+              'Confirm Password',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextField(
+                controller: _cpassword,
+                decoration: InputDecoration(
+                  hintText: "Confirm Password",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                obscureText: true),
+            SizedBox(
+              height: 5,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 MaterialButton(
                   onPressed: () async {
-                    try {
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
-                          email: _username.text, password: _password.text);
-                      Get.snackbar(
-                          "Successful", "Created new username and password");
-                      Get.to(HomeScreen());
-                    } catch (e) {
-                      Get.snackbar("Error", "Couldn't Logged In");
+                    if (_password.text == _cpassword.text) {
+                      try {
+                        await FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                                email: _username.text,
+                                password: _password.text);
+                        Get.snackbar(
+                            "Successful", "Created new username and password");
+                        Get.to(LoginScreen());
+                      } catch (e) {}
+                    } else {
+                      Get.snackbar("Error", "Passwords do not match");
                     }
-                  },
-                  color: Colors.blue,
-                  child: Text(
-                    'Login',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                MaterialButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RegisterScreen(),
-                      ),
-                    );
                   },
                   color: Colors.blue,
                   child: Text(
