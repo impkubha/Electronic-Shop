@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 
+import 'widgets/splash_screen.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -36,19 +38,9 @@ class MyGetMaterialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        // Provider<AuthenticationService>(
-        //   create: (_) => AuthenticationService(FirebaseAuth.instance),
-        // ),
-      ],
-      child: GetMaterialApp(
-        theme: a,
-        home: SplashScreen(),
-        debugShowCheckedModeBanner: false,
-      ),
+    return GetMaterialApp(
+      home: MySplashScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
-
-final ThemeData a = ThemeData.light();

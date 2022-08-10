@@ -39,6 +39,7 @@ dependencies:
   firebase_core: ^1.13.1
   provider: ^6.0.2
   http: ^0.13.4
+  splash_screen_view: ^3.0.0
   
 
 dev_dependencies:
